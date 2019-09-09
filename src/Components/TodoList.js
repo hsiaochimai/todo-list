@@ -12,23 +12,42 @@ export default class TodoList extends Component {
       )
         .then(res => res.json())
         .then(resJson => {
-          this.setState({ selectedUserTodos: resJson }, () => {});
+            console.log(resJson)
+          this.setState({ selectedUserTodos: resJson });
         });
     }
   }
+onCompleteItem(objId){
+    
+const selectedUserTodosCopy=[...this.state.selectedUserTodos]
+const completedTodo=selectedUserTodosCopy.map(todo=>{
+    if(todo.id===objId){
+        todo.completed=true
+    }
+    return todo
+})
+this.setState({selectedUserTodos:completedTodo})
 
+
+}
+onDeleteItem(objId){
+    console.log(`hello deleted item ${objId}` )
+    const selectedUserTodosCopyTwo=[...this.state.selectedUserTodos]
+    const updateTodos=selectedUserTodosCopyTwo.filter(todo=>todo.id!==objId)
+    this.setState({selectedUserTodos:updateTodos})
+}
   render() {
-    const stateCopy = { ...this.state };
-    const unCompletedItems = stateCopy.selectedUserTodos
+    const selectedUserTodosCopy = [...this.state.selectedUserTodos] ;
+    const unCompletedItems = selectedUserTodosCopy
       .filter(todo => todo.completed !== true)
       .map(t => {
-        return <TodoItem title={t.title} />;
+        return <TodoItem onDeleteItem={()=>this.onDeleteItem(t.id)} onCompleteItem={()=>this.onCompleteItem(t.id)}  title={t.title} />;
       });
 
-    const completedItems = stateCopy.selectedUserTodos
+    const completedItems = selectedUserTodosCopy
       .filter(todo => todo.completed === true)
       .map(t => {
-        return <TodoItem title={t.title} />;
+        return <TodoItem onDeleteItem={()=>this.onDeleteItem(t.id)} title={t.title} />;
       });
     return (
       <div className="todo-container">

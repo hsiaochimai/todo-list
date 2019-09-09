@@ -5,8 +5,8 @@ render(){
     return(
         <div>
             <h2>{this.props.title}</h2>
-        <button>delete</button>
-        <button>done</button>
+        <button onClick={this.props.onDeleteItem}>delete</button>
+        {this.props.onCompleteItem ? <button onClick={this.props.onCompleteItem}>done</button> : null}
         </div>
     )
 }
